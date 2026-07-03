@@ -26,11 +26,30 @@ jobs:
 ########################################################
 ##azure login
 #######################################################
+
       - name: Azure Login
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          
+          ######################
+              
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+   
+      - name: Terraform init
+        run: terraform init
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+      - name: TFLint
+        run: tflint --init 
+
+      - name: TFLint
+        run: tflint -f compact
+        #continue-on-error: true #this will continue the job even if the tflint fails
+###############################
+
    
       - name: Terraform init
         run: terraform init
@@ -49,3 +68,4 @@ jobs:
         with:
           name: terraform-plan
           path: terraform/tfplan
+
